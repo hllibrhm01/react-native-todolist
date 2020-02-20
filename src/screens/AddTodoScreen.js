@@ -4,7 +4,8 @@ import {
   Text,
   View,
   Dimensions,
-  ScrollView
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -16,16 +17,51 @@ import InputField from '../components/InputField';
 export default class AddTodoScreen extends Component {
   constructor(props){
     super(props);
-
+    this.state = {
+      taskList: [],
+      text: '',
+    };
   }
 
   handleIconPress = () => {
     alert('clicked');
   }
 
+  handleCategoriesPress = (e) => {
+    e.preventDefault();
+    this.state.taskList.push(this.state.text);
+
+    console.log(this.state.taskList);
+
+    this.setState({
+      text: '',
+    });
+  }
+
+  inputTask = (text) => {
+    this.setState({
+      text,
+    });
+  }
+
+    /*renderItemList = (item, index) => {
+  }*/
+
+  renderItemList(){
+    return(
+      this.state.taskList.map( (item, index) =>
+      <View style={ styles.itemList }>
+        <Text key={index} style={{ margin: hp('2%'), fontSize: hp('2%'), color: colors.white }}>
+          { item }
+        </Text>
+      </View>
+      )
+    );
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <HeaderComponent
           box1IconName={'arrow-left'}
           box2TextValue={'New Task'}
@@ -45,6 +81,8 @@ export default class AddTodoScreen extends Component {
               iconSize={ hp('2%') }
               iconColor={ colors.blue }
               handleIconPress={ this.handleIconPress }
+              onChangeText={ this.inputTask }
+              value={this.state.text}
             />
           </View>
         </View>
@@ -57,10 +95,17 @@ export default class AddTodoScreen extends Component {
               iconSize={ hp('2%') }
               iconColor={ colors.blue }
               handleIconPress={ this.handleIconPress }
+              //onChangeText={ this.inputTask }
+              //onChangeText={text => onChangeText(text)}
             />
           </View>
         </View>
-      </View>
+        <ScrollView style={ styles.outputTask }>
+            {
+              this.renderItemList()
+            }
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -92,5 +137,21 @@ const styles = StyleSheet.create({
     fontSize: hp('1.8%'),
     color: colors.blue,
     fontWeight: '700',
+  },
+  outputTask: {
+    width: wp('100%'),
+    height: hp('50%'),
+    backgroundColor: 'pink',
+  },
+  itemList: {
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: wp('10%'),
+    marginRight: wp('10%'),
+    marginTop: hp('2%'),
+    marginBottom: hp('2%'),
+    borderRadius: 10,
+    padding: hp('2%'),
   },
 });

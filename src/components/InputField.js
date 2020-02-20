@@ -35,6 +35,7 @@ export default class InputField extends Component {
       iconSize,
       iconColor,
       handleIconPress,
+      value,
     } = this.props;
     const { secureInput, scaleCheckmarkValue } = this.state;
     const fontSize = labelTextSize || 14;
@@ -53,6 +54,7 @@ export default class InputField extends Component {
             autoFocus={autoFocus}
             autoCapitalize={autoCapitalize}
             autoCorrect={false}
+            value={value}
           />
          </View>
          <TouchableHighlight
