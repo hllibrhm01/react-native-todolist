@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import HeaderComponent from '../components/HeaderComponent';
 import TodoListViewComponent from '../components/TodoListViewComponent';
 import FooterComponent from '../components/FooterComponent';
 
-export default class HomeScreen extends React.Component {
+export default class HomeScreen extends Component {
 
   handleListPress = () => {
     alert('List Press');
@@ -30,7 +30,14 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View>
-          <HeaderTrial
+          <HeaderComponent
+            box1IconName={'check-square'}
+            box2TextValue={'All List'}
+            box3IconName={'sort-down'}
+            box4IconName={'search'}
+            box5IconName={'ellipsis-v'}
+            fontSizeProp={hp('3%')}
+            box1IconSize={hp('5%')}
             handleListPress={ this.handleListPress }
             handleSearchPress={ this.handleSearchPress }
             handleCategoriesPress={ this.handleCategoriesPress }
@@ -51,8 +58,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     display: 'flex'
-  },
-  todoListView: {
   },
   footer: {
     position: 'absolute',

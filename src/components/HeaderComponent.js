@@ -15,16 +15,28 @@ export default class HeaderComponent extends Component {
 
   render() {
     const underlayColor = 'rgba(73,182,77,1,0.9)';
-    const { handleListPress, handleSearchPress, handleCategoriesPress } = this.props;
+    const {
+      handleListPress,
+      handleSearchPress,
+      handleCategoriesPress,
+      box1IconName,
+      box2TextValue,
+      box3IconName,
+      box4IconName,
+      box5IconName,
+      fontSizeProp,
+      box1IconSize,
+    } = this.props;
+    let fontSizeOps = fontSizeProp;
     return (
       <View style={styles.container}>
 
         <View style={ styles.box1 }>
-          <Icon name="check-square" size={hp('5%')} color="#fff"  />
+          <Icon name={ box1IconName } size={box1IconSize} color="#fff"  />
         </View>
 
         <View style={ styles.box2 }>
-          <Text style={ styles.allListText }>All List</Text>
+          <Text style={ [{ fontSize: fontSizeOps }, styles.allListText] }>{box2TextValue}</Text>
         </View>
 
         <View style={ styles.box3 }>
@@ -32,7 +44,7 @@ export default class HeaderComponent extends Component {
             onPress={ handleListPress }
             underlayColor
           >
-            <Icon name="sort-down" size={hp('3%')} color="#fff"  />
+            <Icon name={box3IconName} size={hp('3%')} color="#fff"  />
           </TouchableHighlight>
         </View>
 
@@ -41,7 +53,7 @@ export default class HeaderComponent extends Component {
             onPress={ handleSearchPress }
             underlayColor
           >
-            <Icon name="search" size={hp('3%')} color="#fff"  />
+            <Icon name={box4IconName} size={hp('3%')} color="#fff"  />
           </TouchableHighlight>
         </View>
 
@@ -50,7 +62,7 @@ export default class HeaderComponent extends Component {
             onPress={ handleCategoriesPress }
             underlayColor
           >
-            <Icon name="ellipsis-v" size={hp('3%')} color="#fff"  />
+            <Icon name={box5IconName} size={hp('3%')} color="#fff"  />
           </TouchableHighlight>
         </View>
 
@@ -70,11 +82,11 @@ const styles = StyleSheet.create({
 
     shadowColor: '#000000',
     shadowOffset: {
-      width: 1,
-      height: 3
+      width: 0,
+      height: 2
     },
-    shadowRadius: 5,
-    shadowOpacity: 1.0,
+    shadowRadius: 3,
+    shadowOpacity: 0.5,
 
     elevation: 10,
   },
@@ -109,13 +121,11 @@ const styles = StyleSheet.create({
     width: wp('15%'),
     height: hp('10%'),
     justifyContent: 'center',
-    paddingLeft: wp('10%'),
+    paddingLeft: wp('8%'),
     paddingTop: hp('3%')
   },
   allListText: {
-    fontSize: hp('3%'),
     fontWeight: '700',
     color: '#fff'
   }
 });
-

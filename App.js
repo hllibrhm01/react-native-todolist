@@ -4,21 +4,14 @@ import { StyleSheet, View, Text } from 'react-native';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
 //import screens
-import Welcome from './src/screens/Welcome';
 import HomeScreen from './src/screens/HomeScreen';
+import AddTodoScreen from './src/screens/AddTodoScreen';
 
-class App extends Component{
+export default class App extends Component{
   render(){
     return (
-      <HomeScreen />
+      //<HomeScreen />
+      <AddTodoScreen />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-});
-
-export default App;

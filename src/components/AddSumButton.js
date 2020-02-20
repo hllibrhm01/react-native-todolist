@@ -58,7 +58,16 @@ const styles = StyleSheet.create({
     width : 64,
     height : 64,
     justifyContent: 'center',
+    backgroundColor: colors.blue,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.75,
 
+    elevation: 10,
   },
 });
 
