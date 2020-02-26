@@ -29,7 +29,10 @@ export default class AddTodoScreen extends Component {
 
   handleCategoriesPress = (e) => {
     e.preventDefault();
-    this.state.taskList.push(this.state.text);
+
+    if(this.state.text){
+      this.state.taskList.push(this.state.text);
+    }
 
     console.log(this.state.taskList);
 
