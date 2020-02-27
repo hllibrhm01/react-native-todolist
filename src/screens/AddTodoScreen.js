@@ -4,62 +4,97 @@ import {
   Text,
   View,
   Dimensions,
+  Button,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import colors from '../styles/colors';
 
 import HeaderComponent from '../components/HeaderComponent';
 import InputField from '../components/InputField';
 
-export default class AddTodoScreen extends Component {
+//action
+import setTask from '../redux/actions/setTask';
+
+class AddTodoScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
-      taskList: [],
       text: '',
     };
   }
-
   handleIconPress = () => {
-    alert('clicked');
+    alert('Voice Button');
   }
 
-  handleCategoriesPress = (e) => {
-    e.preventDefault();
+  handleDatePress = () => {
+    alert('Date button');
+  }
 
-    if(this.state.text){
-      this.state.taskList.push(this.state.text);
+  async componentDidMount() {
+    try {
+      const result = JSON.parse(await AsyncStorage.getItem("todolist"));
+      this.props.task.length < result.length && (
+        result.map(e => setTask(e))
+      )
+    } catch (error) {
+      console.log('Error GET  ' + error.message)
     }
-
-    console.log(this.state.taskList);
-
-    this.setState({
-      text: '',
-    });
   }
 
-  inputTask = (text) => {
-    this.setState({
-      text,
-    });
-  }
-
-    /*renderItemList = (item, index) => {
+ /* updateData = async () => {
+    if(this.state.text){
+      this.props.task.push(this.state.text);
+    }
+    try {
+      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
+      } catch (error) {
+        console.log('Error SET  ' + error.message);
+      }
+    this.setState({ text: '' });
   }*/
 
+
+  handleCategoriesPress = async (e) => {
+    e.preventDefault();
+    if(this.state.text){
+      this.props.task.push(this.state.text);
+    }
+    try {
+      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
+      } catch (error) {
+        console.log('Error SET  ' + error.message);
+      }
+    this.setState({ text: '' });
+  }
+
   renderItemList(){
-    return(
-      this.state.taskList.map( (item, index) =>
-      <View style={ styles.itemList }>
-        <Text key={index} style={{ margin: hp('2%'), fontSize: hp('2%'), color: colors.white }}>
-          { item }
-        </Text>
-      </View>
+    let newDate = new Date();
+    let second = newDate.getSeconds();
+
+    return (
+      this.props.task.map( (item, index) =>
+        <View style={ styles.taskContainer }>
+          <Text style={ styles.textItem } key={ index+1 } >{` ${item}  ${index} `}</Text>
+          <Button title="Delete"
+            key={ index }
+            onPress={ async () =>  {
+              this.props.task.splice(index, 1);
+              console.log(this.props.task);
+              try {
+                const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
+              } catch (error) {
+                console.log('Error SET  ' + error.message);
+              }
+              this.setState({ text: '' });
+            } } />
+        </View>
       )
-    );
+    )
   }
 
   render() {
@@ -84,7 +119,7 @@ export default class AddTodoScreen extends Component {
               iconSize={ hp('2%') }
               iconColor={ colors.blue }
               handleIconPress={ this.handleIconPress }
-              onChangeText={ this.inputTask }
+              onChangeText={ e => this.setState({ text: e }) }
               value={this.state.text}
             />
           </View>
@@ -97,9 +132,9 @@ export default class AddTodoScreen extends Component {
               iconName={ 'calendar' }
               iconSize={ hp('2%') }
               iconColor={ colors.blue }
-              handleIconPress={ this.handleIconPress }
-              //onChangeText={ this.inputTask }
-              //onChangeText={text => onChangeText(text)}
+              value={this.state.text}
+              handleIconPress={ this.handleDatePress }
+              //onChangeText={text => (text)}
             />
           </View>
         </View>
@@ -144,7 +179,6 @@ const styles = StyleSheet.create({
   outputTask: {
     width: wp('100%'),
     height: hp('50%'),
-    backgroundColor: 'pink',
   },
   itemList: {
     backgroundColor: 'green',
@@ -158,3 +192,9 @@ const styles = StyleSheet.create({
     padding: hp('2%'),
   },
 });
+
+const mapStateToProps = (state, ownProps) => ({
+    task: state.setTaskReducer.taskList,
+});
+
+export default connect(mapStateToProps)(AddTodoScreen);
