@@ -13,13 +13,39 @@ import {Container, Content, Button} from 'native-base';
 
 import colors from '../styles/colors';
 import AddSumButton from './AddSumButton';
+import AddTaskComponent from './AddTaskComponent';
 
 class TodoListViewComponent extends Component {
   constructor(props){
     super(props);
     this.state = {
-      todoListViewState: false,
+      todoListViewState: true,
     }
+  }
+
+  handleAddTaskPress = () => {
+    this.state.todoListViewState ? 
+    this.setState({ todoListViewState: false }) :
+    this.setState({ todoListViewState: true });
+  }
+
+  renderNothingTodoScreen = () => {
+    return (
+      <View style={ styles.iconNullTodoView }>
+        <Icon name='tree' size={hp('20%')} style={{ color: colors.darkGray }} />
+        <Text style={ styles.nothingTodoText }>Nothing to do</Text>
+      </View>
+    )
+  }
+
+  renderTaskListScreen = () => {
+    return (
+      <AddTaskComponent 
+        handleDeletePress={ () => alert('Delete') }
+        taskText={ 'Gorev' }
+      />
+    )
+
   }
 
 
@@ -30,16 +56,14 @@ class TodoListViewComponent extends Component {
       <View style={styles.container}>
         <View style={ styles.scrollView }>
         {
-         this.state.todoListViewState === false && (
-          <View style={ styles.iconNullTodoView }>
-          <Icon name='tree' size={hp('20%')} style={{ color: colors.darkGray }} />
-          <Text style={ styles.nothingTodoText }>Nothing to do</Text>
-          </View>
-          )}
+         this.state.todoListViewState ? 
+         ( this.renderTaskListScreen() ) :
+         ( this.renderNothingTodoScreen() ) 
+        }
         </View>
         <View style={ styles.addTodoButton }>
           <AddSumButton
-            handleAddSumButton={ () => alert('AddSumButton')  }
+            handleAddSumButton={ this.handleAddTaskPress }
           />
         </View>
       </View>

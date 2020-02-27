@@ -14,7 +14,7 @@ export default class HeaderComponent extends Component {
 
 
   render() {
-    const underlayColor = 'rgba(73,182,77,1,0.9)';
+    const underlayColor = false;
     const {
       handleListPress,
       handleSearchPress,
@@ -42,7 +42,7 @@ export default class HeaderComponent extends Component {
         <View style={ styles.box3 }>
           <TouchableHighlight
             onPress={ handleListPress }
-            underlayColor={true}
+            underlayColor
           >
             <Icon name={box3IconName} size={hp('3%')} color="#fff"  />
           </TouchableHighlight>
@@ -51,7 +51,7 @@ export default class HeaderComponent extends Component {
         <View style={ styles.box4 }>
           <TouchableHighlight
             onPress={ handleSearchPress }
-            underlayColor={true}
+            underlayColor
           >
             <Icon name={box4IconName} size={hp('3%')} color="#fff"  />
           </TouchableHighlight>

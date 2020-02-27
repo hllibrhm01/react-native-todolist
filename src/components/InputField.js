@@ -60,7 +60,7 @@ export default class InputField extends Component {
          <TouchableHighlight
           style={ styles.icon }
           onPress={ handleIconPress }
-          underlayColor='transparent'
+          underlayColor={ false }
          >
           <Icon name={ iconName } size={ iconSize } color={ iconColor } />
         </TouchableHighlight>
