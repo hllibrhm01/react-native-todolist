@@ -12,6 +12,9 @@ import HeaderComponent from '../components/HeaderComponent';
 import TodoListViewComponent from '../components/TodoListViewComponent';
 import FooterComponent from '../components/FooterComponent';
 
+//screens
+import AddTodoScreen from './AddTodoScreen';
+
 export default class HomeScreen extends Component {
 
   handleListPress = () => {
@@ -24,6 +27,15 @@ export default class HomeScreen extends Component {
 
   handleCategoriesPress = () => {
     alert('Categories Press');
+  }
+
+  handleAddSumButton = ({ navigation }) => {
+    this.props.navigation.replace('AddTodoScreen')
+
+  }
+
+  handleDeletePress = () => {
+    alert('Delete button press');
   }
 
   render() {
@@ -44,7 +56,10 @@ export default class HomeScreen extends Component {
           />
         </View>
         <View style={ styles.todoListView } >
-          <TodoListViewComponent />
+          <TodoListViewComponent 
+            handleAddSumButton={ this.handleAddSumButton }
+            handleDeletePress={ this.handleDeletePress }
+          />
         </View>
         <View style={ styles.footer }>
           <FooterComponent />

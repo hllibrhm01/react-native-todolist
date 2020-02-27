@@ -7,6 +7,7 @@ import {
   Button,
   ScrollView,
   KeyboardAvoidingView,
+  BackHandler,
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
@@ -35,7 +36,18 @@ class AddTodoScreen extends Component {
     alert('Date button');
   }
 
+  handleBackButtonClick = () => {
+    this.props.navigation.replace('Home');
+    return true;
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
   async componentDidMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     try {
       const result = JSON.parse(await AsyncStorage.getItem("todolist"));
       this.props.task.length < result.length && (
@@ -46,23 +58,11 @@ class AddTodoScreen extends Component {
     }
   }
 
- /* updateData = async () => {
-    if(this.state.text){
-      this.props.task.push(this.state.text);
-    }
-    try {
-      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
-      } catch (error) {
-        console.log('Error SET  ' + error.message);
-      }
-    this.setState({ text: '' });
-  }*/
-
-
   handleCategoriesPress = async (e) => {
     e.preventDefault();
     if(this.state.text){
       this.props.task.push(this.state.text);
+      //this.props.navigation.replace('Home');
     }
     try {
       const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
@@ -70,6 +70,10 @@ class AddTodoScreen extends Component {
         console.log('Error SET  ' + error.message);
       }
     this.setState({ text: '' });
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.replace('Home');
   }
 
   renderItemList(){
@@ -109,6 +113,7 @@ class AddTodoScreen extends Component {
           handleListPress={ this.handleListPress }
           handleSearchPress={ this.handleSearchPress }
           handleCategoriesPress={ this.handleCategoriesPress }
+          handleBackPress={ this.handleBackPress }
         />
         <View style={ styles.upperAreaWrapper }>
           <Text style={ styles.text1 }>What is to be done ?</Text>

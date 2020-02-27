@@ -39,9 +39,10 @@ class TodoListViewComponent extends Component {
   }
 
   renderTaskListScreen = () => {
+    const { handleDeletePress } = this.props;
     return (
       <AddTaskComponent 
-        handleDeletePress={ () => alert('Delete') }
+        handleDeletePress={ handleDeletePress }
         taskText={ 'Gorev' }
       />
     )
@@ -51,7 +52,8 @@ class TodoListViewComponent extends Component {
 
   render() {
     const underlayColor = 'rgba(73,182,77,1,0.9)';
-    const { handleListPress, handleSearchPress, handleCategoriesPress } = this.props;
+    const { handleListPress, handleSearchPress, 
+      handleCategoriesPress, handleAddSumButton } = this.props;
     return (
       <View style={styles.container}>
         <View style={ styles.scrollView }>
@@ -63,7 +65,8 @@ class TodoListViewComponent extends Component {
         </View>
         <View style={ styles.addTodoButton }>
           <AddSumButton
-            handleAddSumButton={ this.handleAddTaskPress }
+            //handleAddSumButton={ this.handleAddTaskPress }
+            handleAddSumButton={ handleAddSumButton }
           />
         </View>
       </View>

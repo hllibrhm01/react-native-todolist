@@ -19,6 +19,7 @@ export default class HeaderComponent extends Component {
       handleListPress,
       handleSearchPress,
       handleCategoriesPress,
+      handleBackPress,
       box1IconName,
       box2TextValue,
       box3IconName,
@@ -31,9 +32,12 @@ export default class HeaderComponent extends Component {
     return (
       <View style={styles.container}>
 
-        <View style={ styles.box1 }>
+        <TouchableHighlight style={ styles.box1 }
+        underlayColor={ false }
+          onPress={ handleBackPress }
+        >
           <Icon name={ box1IconName } size={box1IconSize} color="#fff"  />
-        </View>
+        </TouchableHighlight>
 
         <View style={ styles.box2 }>
           <Text style={ [{ fontSize: fontSizeOps }, styles.allListText] }>{box2TextValue}</Text>
