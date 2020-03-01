@@ -1,1 +1,4 @@
-export const SET_TASK = 'SET_TASK';
+export default {
+  SET_TASK: 'SET_TASK',
+  MODAL_VISIBLE: 'MODAL_VISIBLE',
+}

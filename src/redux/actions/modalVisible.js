@@ -1,11 +1,11 @@
 import store from '../store';
 import type from './type';
 
-export default setTask = (task) => {
+export default modalVisible = (info) => {
     store.dispatch({
-        type: type.SET_TASK,
+        type: type.MODAL_VISIBLE,
         payload: {
-            task
+          info
         }
     });
 }

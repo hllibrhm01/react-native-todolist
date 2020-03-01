@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   BackHandler,
+  TouchableHighlight,
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
@@ -15,11 +16,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import colors from '../styles/colors';
 
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
+
 import HeaderComponent from '../components/HeaderComponent';
 import InputField from '../components/InputField';
 
+
+import AddCalendar from '../components/AddCalendar';
+
 //action
 import setTask from '../redux/actions/setTask';
+import modalVisible from '../redux/actions/modalVisible';
+
 
 class AddTodoScreen extends Component {
   constructor(props){
@@ -33,8 +41,9 @@ class AddTodoScreen extends Component {
   }
 
   handleDatePress = () => {
-    alert('Date button');
+    !this.props.isModalVisible ? modalVisible(true) : modalVisible(false);
   }
+
 
   handleBackButtonClick = () => {
     this.props.navigation.replace('Home');
@@ -74,6 +83,10 @@ class AddTodoScreen extends Component {
 
   handleBackPress = () => {
     this.props.navigation.replace('Home');
+  }
+
+  handleOkPress = () => {
+    alert('OK');
   }
 
   renderItemList(){
@@ -131,23 +144,29 @@ class AddTodoScreen extends Component {
         </View>
         <View style={ styles.lowerAreaWrapper }>
           <Text style={ styles.text2 }>Due date</Text>
-          <View style={ styles.inputField }>
-            <InputField
-              placeHolder='Date not set'
-              iconName={ 'calendar' }
-              iconSize={ hp('2%') }
-              iconColor={ colors.blue }
-              value={this.state.text}
-              handleIconPress={ this.handleDatePress }
-              //onChangeText={text => (text)}
-            />
+          <TouchableHighlight
+            onPress={ this.handleDatePress }
+            underlayColor={ false }
+            style={ styles.dateTouchableButton }
+          >
+            <View style={ styles.dateNotSetWrapper }>
+              <View style={ styles.dateNotSetWrapperChild }>
+                <Text style={ styles.dateNotSetStyle }>{ this.props.info }</Text>
+              </View>
+              <View style={{ justifyContent: 'flex-end', margin: wp('1.5%') }}>
+                <Icon name='calendar' size={ hp('2%') } color={ colors.blue } />
+              </View>
+            </View>
+          </TouchableHighlight>
           </View>
-        </View>
         <ScrollView style={ styles.outputTask }>
             {
               this.renderItemList()
             }
         </ScrollView>
+        <AddCalendar
+          handleOkPress={ this.handleOkPress }
+        />
       </KeyboardAvoidingView>
     );
   }
@@ -196,10 +215,37 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: hp('2%'),
   },
+  modalWrapper: {
+    flex: 1,
+    marginBottom: 150,
+    marginTop: 150,
+    marginLeft: 50,
+    marginRight: 50,
+  },
+  okCancelButtonStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  dateNotSetStyle: {
+    margin: hp('0.4%'),
+    marginLeft: wp('1%'),
+    marginTop: hp('1%'),
+    fontSize: hp('2%'),
+    color: colors.darkGray,
+  },
+  dateNotSetWrapper: {
+    flexDirection: 'row',
+  },
+  dateNotSetWrapperChild: {
+    width: wp('80%'),
+    borderBottomWidth: 1,
+    borderColor: colors.blue,
+  },
 });
 
 const mapStateToProps = (state, ownProps) => ({
     task: state.setTaskReducer.taskList,
+    isModalVisible: state.modalVisibleReducer.isModalVisible,
 });
 
 export default connect(mapStateToProps)(AddTodoScreen);
