@@ -46,7 +46,7 @@ class AddTodoScreen extends Component {
 
 
   handleBackButtonClick = () => {
-    this.props.navigation.replace('Home');
+    this.props.navigation.goBack();
     return true;
   }
 
@@ -56,7 +56,6 @@ class AddTodoScreen extends Component {
 
   async componentDidMount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    //BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     try {
       const result = JSON.parse(await AsyncStorage.getItem("todolist"));
       this.props.task.length < result.length && (
@@ -71,7 +70,6 @@ class AddTodoScreen extends Component {
     e.preventDefault();
     if(this.state.text){
       this.props.task.push(this.state.text);
-      //this.props.navigation.replace('Home');
     }
     try {
       const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
@@ -82,7 +80,7 @@ class AddTodoScreen extends Component {
   }
 
   handleBackPress = () => {
-    this.props.navigation.replace('Home');
+    this.props.navigation.replace('HomeScreen');
   }
 
   handleOkPress = () => {

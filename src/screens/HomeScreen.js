@@ -4,7 +4,8 @@ import {
   Text,
   View,
   Dimensions,
-  ScrollView
+  ScrollView,
+  BackHandler
 } from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
@@ -12,10 +13,15 @@ import HeaderComponent from '../components/HeaderComponent';
 import TodoListViewComponent from '../components/TodoListViewComponent';
 import FooterComponent from '../components/FooterComponent';
 
+import { connect } from 'react-redux';
+import setTask from '../redux/actions/setTask';
+
+import AsyncStorage from '@react-native-community/async-storage';
+
 //screens
 import AddTodoScreen from './AddTodoScreen';
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
 
   handleListPress = () => {
     alert('List Press');
@@ -38,6 +44,39 @@ export default class HomeScreen extends Component {
     alert('Delete button press');
   }
 
+  async componentWillMount() {
+    if(this.state.text){
+      this.props.task.push(this.state.text);
+    }
+    try {
+      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
+      } catch (error) {
+        console.log('Error SET  ' + error.message);
+      }
+    this.setState({ text: '' });
+  }
+
+  async componentDidMount() {
+    try {
+      const result = JSON.parse(await AsyncStorage.getItem("todolist"));
+      this.props.task.length < result.length && (
+        result.map(e => setTask(e))
+      )
+    } catch (error) {
+      console.log('Error GET  ' + error.message)
+    }
+  }
+
+  renderTodoListView = () => {
+    return (
+      <TodoListViewComponent
+        handleAddSumButton={ this.handleAddSumButton }
+        handleDeletePress={ this.handleDeletePress }
+        taskText={ this.props.task }
+      />
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -56,10 +95,9 @@ export default class HomeScreen extends Component {
           />
         </View>
         <View style={ styles.todoListView } >
-          <TodoListViewComponent 
-            handleAddSumButton={ this.handleAddSumButton }
-            handleDeletePress={ this.handleDeletePress }
-          />
+          {
+           this.renderTodoListView()
+          }
         </View>
         <View style={ styles.footer }>
           <FooterComponent />
@@ -81,3 +119,9 @@ const styles = StyleSheet.create({
     bottom: 0
   }
 });
+
+const mapStateToProps = (state, ownProps) => ({
+    task: state.setTaskReducer.taskList,
+});
+
+export default connect(mapStateToProps)(HomeScreen);

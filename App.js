@@ -21,13 +21,13 @@ class App extends Component{
   render(){
     return (
      <NavigationContainer>
-      <Stack.Navigator initialRouteName='AddTodoScreen'
+      <Stack.Navigator initialRouteName='HomeScreen'
         screenOptions={{
           headerShown: false
         }}
       >
         <Stack.Screen
-          name="Home"
+          name="HomeScreen"
           component={ HomeScreen }
         />
         <Stack.Screen

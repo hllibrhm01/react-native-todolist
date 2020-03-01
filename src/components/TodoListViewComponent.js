@@ -15,6 +15,8 @@ import colors from '../styles/colors';
 import AddSumButton from './AddSumButton';
 import AddTaskComponent from './AddTaskComponent';
 
+import { connect } from 'react-redux';
+
 class TodoListViewComponent extends Component {
   constructor(props){
     super(props);
@@ -24,7 +26,7 @@ class TodoListViewComponent extends Component {
   }
 
   handleAddTaskPress = () => {
-    this.state.todoListViewState ? 
+    this.state.todoListViewState ?
     this.setState({ todoListViewState: false }) :
     this.setState({ todoListViewState: true });
   }
@@ -39,12 +41,16 @@ class TodoListViewComponent extends Component {
   }
 
   renderTaskListScreen = () => {
+    const { taskText } = this.props;
     const { handleDeletePress } = this.props;
     return (
-      <AddTaskComponent 
+      this.props.task === null ? null :
+      (
+      <AddTaskComponent
         handleDeletePress={ handleDeletePress }
-        taskText={ 'Gorev' }
+        taskText={ taskText }
       />
+      )
     )
 
   }
@@ -52,15 +58,15 @@ class TodoListViewComponent extends Component {
 
   render() {
     const underlayColor = 'rgba(73,182,77,1,0.9)';
-    const { handleListPress, handleSearchPress, 
+    const { handleListPress, handleSearchPress,
       handleCategoriesPress, handleAddSumButton } = this.props;
     return (
       <View style={styles.container}>
         <View style={ styles.scrollView }>
         {
-         this.state.todoListViewState ? 
+         this.state.todoListViewState ?
          ( this.renderTaskListScreen() ) :
-         ( this.renderNothingTodoScreen() ) 
+         ( this.renderNothingTodoScreen() )
         }
         </View>
         <View style={ styles.addTodoButton }>
@@ -93,4 +99,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TodoListViewComponent;
+const mapStateToProps = (state, ownProps) => ({
+    task: state.setTaskReducer.taskList,
+});
+
+export default connect(mapStateToProps)(TodoListViewComponent);
