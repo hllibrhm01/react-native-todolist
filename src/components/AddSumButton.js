@@ -13,12 +13,6 @@ import {Container, Content, Button} from 'native-base';
 import colors from '../styles/colors';
 
 class AddSumButton extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-    }
-  }
-
 
   render() {
     const underlayColor = 'rgba(73,182,77,1,0.9)';

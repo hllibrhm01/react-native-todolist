@@ -12,36 +12,28 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {Container, Content, Button} from 'native-base';
 
 import colors from '../styles/colors';
-import AddSumButton from './AddSumButton';
 
 class AddTaskComponent extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      todoListViewState: false,
-    }
-  }
 
   render() {
-    const { handleDeletePress, taskText, dateText } = this.props;
     const underlayColor = 'rgba(73,182,77,1,0.9)';
-    const { handleListPress, handleSearchPress, handleCategoriesPress } = this.props;
+    const { handleDeletePress, taskText, dateText, 
+      handleListPress, handleSearchPress, 
+      handleCategoriesPress } = this.props;
     return (
-    <ScrollView>
-        <View style={styles.container}>
-            <View style={ styles.textWrapper }>
-                <Text style={ styles.task }>{ taskText }</Text>
-                <Text style={ styles.date }>Sat, Feb 22,2020, 12:00</Text>
-            </View>
+      <View style={styles.container}>
+          <View style={ styles.textWrapper }>
+              <Text style={ styles.task }>{ taskText }</Text>
+              <Text style={ styles.date }>Sat, Feb 22,2020, 12:00</Text>
+          </View>
 
-            <TouchableHighlight 
-                underlayColor={ false }
-                onPress={ handleDeletePress }
-                style={ styles.iconRubbish }>
-                <Icon name='trash' size={hp('3%')} style={{ color: colors.black }} />
-            </TouchableHighlight>
-        </View>
-    </ScrollView>
+          <TouchableHighlight
+              underlayColor={ false }
+              onPress={ handleDeletePress }
+              style={ styles.iconRubbish }>
+              <Icon name='trash' size={hp('3%')} style={{ color: colors.black }} />
+          </TouchableHighlight>
+      </View>
     );
   }
 }
@@ -66,11 +58,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   textWrapper: {
-      width: wp('80%'),      
+      width: wp('80%'),
   },
   iconRubbish: {
       justifyContent: 'center',
-      width: wp('5%'),      
+      width: wp('5%'),
   },
   task: {
       fontSize: hp('2%'),

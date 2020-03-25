@@ -17,7 +17,6 @@ import { connect } from 'react-redux';
 import setTask from '../redux/actions/setTask';
 
 import AsyncStorage from '@react-native-community/async-storage';
-
 //screens
 import AddTodoScreen from './AddTodoScreen';
 
@@ -32,31 +31,15 @@ class HomeScreen extends Component {
   }
 
   handleCategoriesPress = () => {
-    alert('Categories Press');
+    this.props.navigation.replace('AddTodoScreen');
   }
 
-  handleAddSumButton = ({ navigation }) => {
+  handleAddSumButton = () => {
     this.props.navigation.replace('AddTodoScreen')
 
   }
 
-  handleDeletePress = () => {
-    alert('Delete button press');
-  }
-
   async componentWillMount() {
-    if(this.state.text){
-      this.props.task.push(this.state.text);
-    }
-    try {
-      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
-      } catch (error) {
-        console.log('Error SET  ' + error.message);
-      }
-    this.setState({ text: '' });
-  }
-
-  async componentDidMount() {
     try {
       const result = JSON.parse(await AsyncStorage.getItem("todolist"));
       this.props.task.length < result.length && (
@@ -69,11 +52,23 @@ class HomeScreen extends Component {
 
   renderTodoListView = () => {
     return (
-      <TodoListViewComponent
-        handleAddSumButton={ this.handleAddSumButton }
-        handleDeletePress={ this.handleDeletePress }
-        taskText={ this.props.task }
-      />
+          this.props.task.map( (item, index) =>
+            <TodoListViewComponent
+              handleAddSumButton={ this.handleAddSumButton }
+              handleDeletePress={ 
+                  async () =>  {
+                    this.props.task.splice(index, 1);
+                    try {
+                      const result = await AsyncStorage.setItem("todolist", JSON.stringify(this.props.task));
+                    } catch (error) {
+                      console.log('Error SET  ' + error.message);
+                    }
+                    this.setState({ text: '' });
+                  }
+                }
+              taskText={ item }
+            />
+          )
     )
   }
 
@@ -96,7 +91,8 @@ class HomeScreen extends Component {
         </View>
         <View style={ styles.todoListView } >
           {
-           this.renderTodoListView()
+            this.props.task.length === 0 ? <TodoListViewComponent handleAddSumButton={ this.handleAddSumButton } /> 
+            : this.renderTodoListView()
           }
         </View>
         <View style={ styles.footer }>
